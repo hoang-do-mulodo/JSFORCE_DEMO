@@ -7,6 +7,8 @@ const jsforce = require('jsforce');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const accounts = require('./routes/accounts');
+const contacts = require('./routes/contacts');
 
 var app = express();
 
@@ -22,6 +24,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.use('/accounts', accounts);
+app.use('/contacts' , contacts);
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
@@ -114,12 +119,35 @@ app.get("/auth/login" ,function (req, res) {
 //         .run({ autoFetch : true, maxFetch : 4000 });
 // });
 
+
+
+// LOGIN DIRECTLY
+
+// var conn = new jsforce.Connection({
+//     // you can change loginUrl to connect to sandbox or prerelease env.
+//     loginUrl : 'https://login.salesforce.com'
+// });
+// var username='laihoangdo0506@curious-bear-309618.com';
+// var password='do01652164495';
+// password = password + 'zAYTpRAwuAcXm19I0oGwsKaV';
+
+// var conn = new jsforce.Connection({
+//     // you can change loginUrl to connect to sandbox or prerelease env.
+//     loginUrl : 'https://test.salesforce.com'
+// });
+// var username='takeshi.narita-abcv@force.com.sandbox04';
+// var password='Jica201809';
+
 var conn = new jsforce.Connection({
     // you can change loginUrl to connect to sandbox or prerelease env.
     loginUrl : 'https://login.salesforce.com'
 });
 var username='lai.do@brave-shark-aopfgn.com';
 var password='do0972268792';
+password = password +'3g7lolGM2hQ1JtS44KqAEdBk';
+
+
+
 conn.login(username, password, function(err, userInfo) {
     if (err) { return console.error(err); }
     // Now you can get the access token and instance URL information.
@@ -133,9 +161,12 @@ conn.login(username, password, function(err, userInfo) {
     conn.query("SELECT Id, Name FROM Account", function(err, result) {
         if (err) { return console.error("z"+err); }
         console.log("total : " + result.totalSize);
+        // console.log('result' + toJSON(result.records));
+
         totalSize=result.totalSize;
         console.log("fetched : " + result.records.length);
     });
 });
+
 
 module.exports = app;
